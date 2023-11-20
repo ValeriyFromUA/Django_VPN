@@ -2,6 +2,8 @@ from decimal import Decimal
 
 import requests
 from bs4 import BeautifulSoup
+from django.http import HttpResponse
+
 from core.forms import NewGuestForm
 from core.models import Portals
 from core.utils import get_domain_from_url, modify_links
@@ -62,7 +64,7 @@ class PortalView(View):
 
         modify_links(soup, domain)
         html_content = soup.prettify()
-        return render(request, 'portal.html', {'html_content': html_content})
+        return HttpResponse(html_content, content_type='text/html')
 
 
 class RegistrationView(View):
