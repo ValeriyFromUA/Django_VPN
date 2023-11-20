@@ -2,50 +2,52 @@ from decimal import Decimal
 
 import requests
 from bs4 import BeautifulSoup
-from django.contrib.auth import login, authenticate, logout
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
-from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView
-
 from core.forms import NewGuestForm
-from core.models import Guest, Portals
+from core.models import Portals
 from core.utils import get_domain_from_url, modify_links
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.generic import TemplateView
 
 
-class HomeView(View):
+@method_decorator(login_required, name='dispatch')
+class HomeView(TemplateView):
     template_name = "home.html"
 
-    def get(self, request):
-        form = NewGuestForm()
-        return render(request, self.template_name)
 
-
-class ProxyView(View):
+@method_decorator(login_required, name='dispatch')
+class PortalHubView(View):
 
     @staticmethod
     def get(request):
         portals = Portals.objects.filter(guest=request.user)
-        return render(request, 'proxy.html', {'portals': portals})
+        return render(request, 'portal_hub.html', {'portals': portals})
 
     @staticmethod
     def post(request):
         website = request.POST.get("website")
         portal_name = request.POST.get("portal_name")
-        portal = Portals(
-            guest=request.user,
-            portal_name=portal_name,
-            domain=get_domain_from_url(website),
-        )
-        portal.save()
+        domain = get_domain_from_url(website)
+        check_another_portal = Portals.objects.filter(guest=request.user, domain=domain)
+        if not check_another_portal:
+            portal = Portals(
+                guest=request.user,
+                portal_name=portal_name,
+                domain=domain,
+            )
+            portal.save()
 
-        return redirect(reverse('proxy_more', args=[website]))
+        return redirect(reverse('portal', args=[website]))
 
 
-class ProxyMoreView(View):
+@method_decorator(login_required, name='dispatch')
+class PortalView(View):
 
     @staticmethod
     def get(request, website, path=None):
@@ -59,7 +61,7 @@ class ProxyMoreView(View):
 
         modify_links(soup, domain)
         html_content = soup.prettify()
-        return render(request, 'proxy_view.html', {'html_content': html_content})
+        return render(request, 'portal.html', {'html_content': html_content})
 
 
 class RegistrationView(View):
@@ -74,7 +76,7 @@ class RegistrationView(View):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(reverse("profile", args=[str(user.pk)]))
+            return redirect(reverse("home"))
         else:
             if "email" in form.errors:
                 messages.error(request, "Invalid email address")
@@ -104,17 +106,12 @@ class LoginView(View):
             return render(request, "login.html")
 
         login(request, user)
-        return redirect(reverse("profile", args=[user.id]))
+        return redirect(reverse("home"))
 
 
+@method_decorator(login_required, name='dispatch')
 class LogoutView(LoginRequiredMixin, View):
     @staticmethod
     def get(request):
         logout(request)
         return redirect(reverse_lazy("login"))
-
-
-class GuestProfileView(LoginRequiredMixin, DetailView):
-    model = Guest
-    template_name = "profile.html"
-    context_object_name = "guest"

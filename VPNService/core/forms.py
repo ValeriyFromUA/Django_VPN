@@ -1,7 +1,5 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm
-
 from core.models import Guest
+from django.contrib.auth.forms import UserCreationForm
 
 
 class NewGuestForm(UserCreationForm):

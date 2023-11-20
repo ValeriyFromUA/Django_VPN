@@ -12,7 +12,7 @@
                    required>
         </div>
         <div class="form-group">
-            <label for="portal_name">What you want open?</label>
+            <label for="portal_name">Set the name of the portal</label>
             <input type="text" class="form-control" id="portal_name" name="portal_name"
                    placeholder="Your portal name here..." required>
         </div>
@@ -23,7 +23,8 @@
 <div class="container">
     {% for portal in portals %}
     <div class="alert alert-dark" role="alert">
-        <a href="{% url 'proxy_more' website=portal.domain %}">{{portal.portal_name }}</a> {{ portal.data_volume }} MB
+        <a href="{% url 'portal' website=portal.domain %}">{{portal.portal_name }} [{{ portal.domain }}]</a>
+        {{ portal.data_volume }} MB
     </div>
     {% endfor %}
 </div>
