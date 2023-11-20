@@ -18,6 +18,7 @@ class Portals(models.Model):
     domain = models.CharField(max_length=1000, null=False)
     portal_name = models.CharField(max_length=1000, null=False)
     data_volume = models.DecimalField(max_digits=10, decimal_places=2, help_text="Data volume in megabytes", default=0)
+    page_views = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = "Портал"
