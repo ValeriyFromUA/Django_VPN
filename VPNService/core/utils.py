@@ -20,6 +20,6 @@ def modify_links(soup, domain):
                     if domain == links_with_domain:
                         modified_link = f'/portal/https://{link}'.replace('https://https://', 'https://')
                         a_tag['href'] = modified_link
-                if domain not in link:
+                if domain not in link and not any(char in link for char in excluded_extensions):
                     modified_link = f'/portal/https://{domain}/{link}'.replace('https://https://', 'https://')
                     a_tag['href'] = modified_link
