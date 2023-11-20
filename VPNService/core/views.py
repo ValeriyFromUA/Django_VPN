@@ -57,6 +57,7 @@ class PortalView(View):
         soup = BeautifulSoup(data.content, 'lxml')
         data_size_mb = Decimal(len(data.content)) / Decimal(1024 * 1024)
         portal.data_volume += data_size_mb
+        portal.page_views += 1
         portal.save()
 
         modify_links(soup, domain)

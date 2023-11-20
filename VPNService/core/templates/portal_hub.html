@@ -24,7 +24,7 @@
     {% for portal in portals %}
     <div class="alert alert-dark" role="alert">
         <a href="{% url 'portal' website=portal.domain %}">{{portal.portal_name }} [{{ portal.domain }}]</a>
-        {{ portal.data_volume }} MB
+        {{ portal.data_volume }} MB / {{ portal.page_views }} pages
     </div>
     {% endfor %}
 </div>
