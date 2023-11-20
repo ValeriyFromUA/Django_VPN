@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "vpn-service"
+version = "0.1.0"
+description = ""
+authors = ["ValeriyFromUA <hitehnik132@gmail.com>"]
+readme = "README.md"
+packages = [{include = "vpn_service"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.7"
+python-dotenv = "^1.0.0"
+bs4 = "^0.0.1"
+requests = "^2.31.0"
+lxml = "^4.9.3"
+psycopg2-binary = "^2.9.9"
+isort = "^5.12.0"
+flake8 = "^6.1.0"
+pre-commit = "^3.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

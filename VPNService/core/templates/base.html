@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous">
+    <style>.green-text {
+    color: limegreen;
+}
+
+.green-link {
+    color: limegreen;
+    text-decoration: none; /* Ви можете вказати бажаний стиль підкреслення або відсутність його */
+}</style>
+</head>
+<body>
+<div class="container">
+<header class="p-3 bg-dark text-white">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/fc4e765d-760d-45dc-9f31-58d1bd0eb872/dc4z89w-641684e2-15ca-497b-b5ca-c331e7e055b6.png/v1/fill/w_894,h_894/rick_and_morty_portal_1___free_download_by_loaf_of_muffin_dc4z89w-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTAyNCIsInBhdGgiOiJcL2ZcL2ZjNGU3NjVkLTc2MGQtNDVkYy05ZjMxLTU4ZDFiZDBlYjg3MlwvZGM0ejg5dy02NDE2ODRlMi0xNWNhLTQ5N2ItYjVjYS1jMzMxZTdlMDU1YjYucG5nIiwid2lkdGgiOiI8PTEwMjQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.5PeSWIoX1cFhDXi8nbPstLGpqjyYC0D9r5rBPrjKbh0" alt="" width="30" height="30" class="d-inline-block align-text-top">
+
+    </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'home' %}" class="nav-link px-2 {% if 'home' in request.path %}disabled{% else %}text-white{% endif %}">Home</a></li>
+
+            <li><a href="{% url 'portal_hub' %}" class="nav-link px-2 {% if 'portal_hub' in request.path %}disabled{% else %}text-white{% endif %}">My Portals</a>
+
+        </ul>
+
+<div class="text-end">
+
+
+    <a href="{% url 'logout' %}" class="btn btn-outline-light me-2">Logout</a>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-outline-light me-2">Create account</a>
+  {% endif %}
+</div>
+
+      </div>
+    </div>
+  </header>
+</div>
+<div class="container"> {% block content %} {% endblock %}</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

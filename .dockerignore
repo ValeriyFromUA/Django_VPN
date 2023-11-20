@@ -1,0 +1,5 @@
+__pycache__/
+.env_example
+.flake8
+.gitignore
+.pre-commit-config.yaml

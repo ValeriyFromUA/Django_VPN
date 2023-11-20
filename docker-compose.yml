@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - 5439:5432
+
+  app:
+    build: .
+    command: bash -c "python VPNService/manage.py migrate && python VPNService/manage.py runserver 0.0.0.0:7500"
+
+    volumes:
+      - .:/app
+    ports:
+      - "7500:7500"
+    environment:
+      - POSTGRES_NAME=${POSTGRES_DB}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+    env_file:
+      - .env
+  test:
+    build: .
+    command: bash -c "python VPNService/manage.py test core --verbosity 2"
+    volumes:
+      - .:/app
+    environment:
+      - POSTGRES_NAME=${POSTGRES_DB}
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - db
+    env_file:
+      - .env
